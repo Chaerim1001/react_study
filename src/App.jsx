@@ -1,119 +1,46 @@
 import {
-    EachPostLi,
-    Footer,
-    FooterBig,
-    FooterSmall,
-    Header,
-    LoadingDiv,
-    LoadingImg,
     Main,
     MediaDiv,
-    PagenumberDiv,
-    PagingSection,
-    PostLink,
-    PostListDiv,
-    PostRepl,
-    PostSection,
-    PostTitle,
-    PostTitleDiv,
-    SlogunBig,
-    SlogunSection,
-    SlogunSmall,
-    SubHeaderDiv,
-    TitleBig,
-    TitleLogoDiv,
-    TitleSmall,
 } from './styledComponent';
 
-// yarn add @fortawesome/free-solid-svg-icons @fortawesome/react-fontawesome @fortawesome/fontawesome-svg-core @fortawesome/free-brands-svg-icons
-import {
-    faSun,
-    faMoon,
-    faArrowsRotate,
-    faPenToSquare,
-    faLocationPin,
-    faArrowLeft,
-    faArrowRight,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faReact } from '@fortawesome/free-brands-svg-icons';
 import { darkTheme, GlobalStyles, lightTheme } from './styles';
 import { ThemeProvider } from 'styled-components';
-import loadingIcon from './loading.svg'
+import { useState } from 'react';
+import Header from './Header';
+import Slogun from './Slogun';
+import ShowPostList from './ShowPostList';
+import Footer from './Footer';
 
 function App() {
-    const darkMode = false;
-    const loading = false;
-    const isPost = true;
+    const initialPostList = [
+        { id: 1, title: '멋쟁이 사자처럼', replCount: 222 },
+        { id: 2, title: '서울여대 10기', replCount: 11 },
+        { id: 3, title: '일요일 정기세션', replCount: 33 },
+        { id: 4, title: '최고', replCount: 323},
+        { id: 5, title: '멋쟁이', replCount: 242 },
+        { id: 6, title: '짱짱', replCount: 52}
+    ];
+    const [darkMode, setDarkMode] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const [isPost, setIsPost] = useState(false);
+
+    const [postList, setPostList] = useState(initialPostList);
+    const addPost = () => { 
+        setPostList((postList) => 
+            [...postList,  { id: 7, title: '잘래', replCount: 72}]
+        )
+    }
     return (
         <>
             <ThemeProvider theme={ darkMode ? darkTheme : lightTheme}>
-<GlobalStyles />
-    <MediaDiv>
-        <Header>
-                <TitleLogoDiv>       
-                    <TitleBig>멋사</TitleBig>
-                    <TitleSmall>익명 게시판</TitleSmall>
-                </TitleLogoDiv> 
-                    <SubHeaderDiv>{
-                        darkMode ? (
-                            <div>
-                                <FontAwesomeIcon icon={faSun} />
-                            </div>
-                        ) : (
-                                <div>
-                                <FontAwesomeIcon icon={faMoon} />
-                            </div>
-                        )
-                    }</SubHeaderDiv>
-        </Header>
-        
-        <Main>
-            <SlogunSection>
-                <SlogunBig>HACK YOUR LIFE</SlogunBig>      
-                <SlogunSmall>내 아이디어를 내 손으로 실현하다.</SlogunSmall>      
-            </SlogunSection>
-            
-            <PostSection>
-                    <PostTitleDiv>
-                        <FontAwesomeIcon icon={faArrowsRotate} />
-                        <PostTitle>익명게시판</PostTitle>
-                        <FontAwesomeIcon icon={faPenToSquare} />
-                    </PostTitleDiv>
-                            <PostListDiv>
-                                {loading ? (
-                                   <LoadingDiv>
-                                       <LoadingImg src={loadingIcon} />
-                                   </LoadingDiv>
-                                ) : (isPost ? (<LoadingDiv>기록된 게시글 없음</LoadingDiv>) : (
-                                        <ul>
-                                                <EachPostLi>
-                                             <div>
-                                    <FontAwesomeIcon icon={faLocationPin} />
-                                    <PostLink>
-                                        서울여대 멋쟁이 사자처럼 시작
-                                    </PostLink>
-                                            </div>
-                                <PostRepl>[35]</PostRepl>
-                                        </EachPostLi>
-                                    </ul>
-                                )
-                                        
-                                )}
-                    
-                     
-                    </PostListDiv>
-                </PostSection>    
-                <PagingSection>
-                    <PagenumberDiv><FontAwesomeIcon icon={faArrowLeft}/></PagenumberDiv>
-                    <PagenumberDiv>2</PagenumberDiv>
-                    <PagenumberDiv><FontAwesomeIcon icon={faArrowRight}/></PagenumberDiv>
-                </PagingSection>
+            <GlobalStyles />
+                <MediaDiv>
+                    <Header darkMode={ darkMode } setDarkMode={setDarkMode} />
+                    <Main>
+                        <Slogun/>
+                        <ShowPostList postList={postList} loading={loading} isPost={isPost} addPost={ addPost }/>
         </Main>
-            <Footer><FontAwesomeIcon icon={faReact} />
-                <FooterBig> for react study</FooterBig>
-                <FooterSmall>2022. by chaerim</FooterSmall>
-                </Footer>
+            <Footer />
                 </MediaDiv>
             </ThemeProvider>
     </>);
